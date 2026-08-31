@@ -40,14 +40,22 @@ else:
                     # Anfrage an Claude senden
                     message = client.messages.create(
                         model="claude-sonnet-5",
-                        max_tokens=2048,
+                        max_tokens=4096,
                         system=system_prompt,
                         messages=[
                             {"role": "user", "content": f"Hier ist mein Lernstoff:\n\n{text_content}"}
                         ]
                     )
                     
-                    script_text = message.content[0].text
+                    # Sucht nach dem eigentlichen Textblock und ignoriert die ThinkingBlocks
+                    script_text = ""
+                    for block in message.content:
+                        if hasattr(block, 'text'):
+                            script_text += block.text
+                    
+                    if not script_text:
+                        raise ValueError("Es wurde kein gültiger Text von Claude zurückgegeben.")
+                    
                     clean_text = script_text.replace("Alex:", "").replace("Sam:", "")
                     
                     # Audio-Generierung über Google TTS (kostenlos)

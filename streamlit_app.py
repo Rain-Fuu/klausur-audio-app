@@ -39,7 +39,7 @@ else:
                     
                     # Anfrage an Claude senden
                     message = client.messages.create(
-                        model="claude-3-5-sonnet-20240620",
+                        model="claude-sonnet-5",
                         max_tokens=2048,
                         system=system_prompt,
                         messages=[

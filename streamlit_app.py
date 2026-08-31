@@ -47,7 +47,7 @@ else:
                         ]
                     )
                     
-                    script_text = message.content.text
+                    script_text = message.content[0].text
                     clean_text = script_text.replace("Alex:", "").replace("Sam:", "")
                     
                     # Audio-Generierung über Google TTS (kostenlos)

@@ -13,7 +13,7 @@ api_key = os.environ.get("ANTHROPIC_API_KEY")
 if not api_key:
     st.warning("⚠️ Bitte hinterlege zuerst deinen ANTHROPIC_API_KEY in den Streamlit Secrets!")
 else:
-    # Claude Client erstellen
+    # Ganz normaler Claude Client ohne Workspace-ID
     client = Anthropic(api_key=api_key)
 
     uploaded_file = st.file_uploader("Lade deine Textnotizen hoch (.txt)", type=["txt"])
@@ -37,7 +37,7 @@ else:
                         "Nutze kein Markdown, keine Einleitungen und keine fettgedruckten Markierungen."
                     )
                     
-                    # Anfrage an Claude senden (Nutzt das schnelle & smarte Claude 3.5 Sonnet)
+                    # Anfrage an Claude senden
                     message = client.messages.create(
                         model="claude-3-5-sonnet-20240620",
                         max_tokens=2048,
@@ -47,10 +47,7 @@ else:
                         ]
                     )
                     
-                    # Skript-Text auslesen
-                    script_text = message.content[0].text
-                    
-                    # Sprechernamen für ein flüssiges Audio entfernen
+                    script_text = message.content.text
                     clean_text = script_text.replace("Alex:", "").replace("Sam:", "")
                     
                     # Audio-Generierung über Google TTS (kostenlos)
